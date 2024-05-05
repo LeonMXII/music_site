@@ -42,11 +42,14 @@ LEFT JOIN Tracks ON Albums.id = Tracks.id
 GROUP BY Albums.album;
 
 --Все исполнители которые не впустили альбомы в 2020 году 
-SELECT artist
+SELECT DISTINCT artist 
 FROM Artists
-LEFT JOIN artists_albums ON Artists.id = artist_id
-LEFT JOIN Albums ON artist_id = Albums.id
-WHERE Albums.released <> 2020 or Albums.released IS NULL;
+WHERE artist NOT IN(
+    SELECT DISTINCT artist FROM Artists
+    LEFT JOIN artists_albums ON Artists.id = artist_id
+    LEFT JOIN Albums ON artist_id = Albums.id
+    WHERE Albums.released = 2020)
+ORDER BY artist;
 
 --Название сборников, в которых присутствует конкретный исполнитель (выберите его сами)
 SELECT names 
